@@ -1,0 +1,40 @@
+<!doctype html>
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="{% static 'todolist/css/style.css' %}">
+</head>
+<body>
+    <div class="ui menu">
+        <a class="item" href="{% url 'index' %}">Главная</a>
+        {% if user.is_authenticated %}
+            <a class="item" href="{% url 'logout' %}">Выход</a>
+        {% else %}
+            <a class="item" href="{% url 'login' %}">Вход</a>
+            <a class="item" href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+    </div>
+
+    {% block content %}
+    {% endblock content %}
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            console.log('jQuery is loaded');
+            $('#addTaskButton').click(function(){
+                console.log('Button clicked');
+                $('#addTaskModal').modal('show');
+            });
+        });
+    </script>
+</body>
+</html>

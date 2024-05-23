@@ -1,0 +1,20 @@
+body {
+    background-color: #FAF9F6; /* Цвет слоновой кости */
+}
+
+.test_style {
+    text-align: center;
+    color: #228B22; /* ForestGreen */
+}
+
+.ui.segment {
+    background-color: #FFFFFF; /* Белый цвет для сегментов */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+}
+
+.ui.header {
+    color: #333333; /* Темно-серый для заголовков */
+}
+

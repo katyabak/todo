@@ -1,0 +1,107 @@
+{% extends 'todoapp/layout.html' %}
+
+{% block content %}
+
+<!-- Блок для авторизованных пользователей -->
+{% if user.is_authenticated %}
+<div class="ui container" style="margin-top: 50px; margin-left: 60px; display: flex; justify-content: space-between; align-items: flex-start;">
+    <!-- Форма для добавления задачи -->
+    <div class="ui segment" style="width: 55%;">
+        <h2 class="ui header">Добавить задачу</h2>
+        <form class="ui form" method="POST" action="{% url 'add' %}">
+            {% csrf_token %}
+            <div class="field">
+                <label>Название задачи</label>
+                <input type="text" name="title" placeholder="Введите название задачи">
+            </div>
+            <div class="field">
+                <label>Дата добавления</label>
+                <input type="date" name="created_at">
+            </div>
+            <div class="field">
+                <label>Срок выполнения</label>
+                <input type="date" name="due_date">
+            </div>
+            <div class="field">
+                <label>Приоритет</label>
+                <select name="priority" class="ui dropdown">
+                    <option value="low">Низкий</option>
+                    <option value="medium">Средний</option>
+                    <option value="high">Высокий</option>
+                </select>
+            </div>
+            <button class="ui button" type="submit" style="background-color: #5C8473; color: #FFFFFF;">Добавить задачу</button>
+        </form>
+    </div>
+    <!-- Форма для выбора параметров сортировки-->
+    <div class="ui container" style="">
+        <div class="ui segment" style="display: flex; flex-direction: column; width: 65%; margin-left: 20px">
+            <h2 class="ui header">Сортировка задач</h2>
+            <form class="ui form" method="GET">
+                <div class="fields" style="display: flex; flex-direction: column; margin-bottom: 5px">
+                    <div class="field" style="margin: 15px 0px 10px 0px;">
+                        <label>Сортировать по:</label>
+                        <select class="ui dropdown" name="sort_by">
+                            <option value="" {% if not sort_by %}selected{% endif %}>Без сортировки</option>
+                            <option value="priority" {% if sort_by == 'priority' %}selected{% endif %}>Приоритету</option>
+                            <option value="created_at" {% if sort_by == 'created_at' %}selected{% endif %}>Дате добавления</option>
+                            <option value="due_date" {% if sort_by == 'due_date' %}selected{% endif %}>Сроку выполнения</option>
+                        </select>
+                    </div>
+                    <div class="field" style="margin-top: 15px;">
+                        <button class="ui button" type="submit" style="background-color: #5C8473; color: #FFFFFF;">Применить сортировку</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Вывод списка задач -->
+    <div class="ui container" style="margin-top: 0px; max-height: 600px; overflow-y: auto; border: thin #5C8473 medium; border-radius: 10px;">
+        {% for todo in todo_list %}
+        <div class="ui segment" style="margin: 15px first-child:: margin-top:0px;">
+            <p class="ui big header">{{ todo.title }}</p>
+            <!-- Дополнительная информация о задаче -->
+            <p>Дата добавления: {{ todo.created_at }}</p>
+            <p>Срок выполнения: {{ todo.due_date }}</p>
+            <!-- Исправленное отображение приоритета -->
+            <p>Приоритет:
+                {% if todo.priority == 'low' %}
+                    Низкий
+                {% elif todo.priority == 'medium' %}
+                    Средний
+                {% elif todo.priority == 'high' %}
+                    Высокий
+                {% endif %}
+            </p>
+
+            <!-- Кнопки для обновления и удаления задачи -->
+            {% if todo.is_complete == False %}
+            <span class="ui gray label">Не завершено</span>
+            <a class="ui primary basic button" href="{% url 'update' todo_id=todo.id %}">Закрыть</a>
+            {% else %}
+            <span class="ui green label">Завершено</span>
+            <a class="ui blue button" href="{% url 'update' todo_id=todo.id %}">Открыть</a>
+            {% endif %}
+            <a class="ui negative basic button" href="{% url 'delete' todo_id=todo.id %}">Удалить</a>
+
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+<!-- Блок для неавторизованных пользователей -->
+{% else %}
+<div class="ui container" style="margin-top: 20px;">
+    <div style="text-align: center;">
+        <h3 style="margin-bottom: 20px;">Создайте профиль, чтобы создать свой список задач</h3>
+        <img src="https://t4.ftcdn.net/jpg/04/28/75/97/360_F_428759715_jsOPITlaytE3QXc2yI1D4U6uwZdVGkRp.jpg" style="margin-bottom: 20px;">
+        <div style="margin-top: 20px;">
+            <a class="ui primary button" href="{% url 'register' %}" style="background-color: #5C8473; color: #FFFFFF;">Регистрация</a>
+            <a class="ui button" href="{% url 'login' %}" >Вход</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'todoapp/layout.html' %}
+
+{% block content %}
+<div class="ui middle aligned center aligned grid">
+  <div class="column" style="max-width: 450px;">
+    <h2 class="ui black image header">
+      <div class="content" style="padding-top: 20px;">
+        Вход
+      </div>
+    </h2>
+    <form class="ui large form" method="post">
+      {% csrf_token %}
+      <div class="ui stacked segment">
+        {{ form.as_p }}
+        <button type="submit" class="ui fluid large grey submit button"  style="background-color: #5C8473; color: #FFFFFF;">Войти</button>
+      </div>
+
+      <div class="ui error message"></div>
+
+    </form>
+
+    <div class="ui message">
+      Новый пользователь? <a href="{% url 'register' %}">Зарегистрируйтесь</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
